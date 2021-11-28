@@ -30,9 +30,10 @@ void welcome()
 }
 
 char Commands[][10] = {"rm","cd","pwd","mkdir","rmdir","ls","cp","exit","touch"};
-char cwd[256];
+
 char* pwd()
 {
+    char cwd[256];
     if (getcwd(cwd, sizeof(cwd)) == NULL)
     {
         perror("getcwd() error");
@@ -52,14 +53,11 @@ void cd(char s[])
 	}
 	else
 	{
-	char *d=pwd();
-	strcat(d,"\\");
-	strcat(d,s);
-	int ch=chdir(d);
-	if(ch<0)
-	{
-		printf("The system cannot find the path specified.\n");
-	}
+	    int ch = chdir(s);
+        if(ch<0)
+        {
+            printf("The system cannot find the path specified.\n");
+        }
 	}
 }
 
@@ -101,7 +99,7 @@ void rmdirt(char *s)
     {
     	if(DirectoryExists(s))
     	{
-    		printf("Not an empty directory");
+    		printf("Not an empty directory\n");
 		}
 		else
 		{
@@ -219,6 +217,11 @@ int main()
         }
         if (strcmp(commandsplit[0],"cd")==0)
         {
+            if(commandsplit[1]==NULL)
+            {
+                printf("Argument to cd command is expected\n");
+                continue;
+            }
         	cd(commandsplit[1]);
         }
         else if(strcmp(commandsplit[0],"pwd")==0)
