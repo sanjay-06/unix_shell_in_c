@@ -45,7 +45,7 @@ char* pwd()
 }
 
 void cd(char s[])
-{	
+{
 	if(!strcmp(s,".."))
 	{
 		int ch=chdir("..");
@@ -58,7 +58,7 @@ void cd(char s[])
 	int ch=chdir(d);
 	if(ch<0)
 	{
-		printf("\nThe system cannot find the path specified.\n");
+		printf("The system cannot find the path specified.\n");
 	}
 	}
 }
@@ -68,7 +68,7 @@ void mkdirt(char *s)
     int check = mkdir(s);
     if (!check)
         printf("Directory created\n");
-    else 
+    else
         printf("Unable to create directory\n");
 }
 void rm(char *s)
@@ -81,6 +81,7 @@ void rm(char *s)
       printf("Error: unable to delete the file\n");
    }
 }
+
 int DirectoryExists(const char *path)
 {
     struct stat stats;
@@ -90,12 +91,13 @@ int DirectoryExists(const char *path)
 
     return 0;
 }
+
 void rmdirt(char *s)
 {
     int check = rmdir(s);
     if (!check)
         printf("Directory deleted\n");
-    else 
+    else
     {
     	if(DirectoryExists(s))
     	{
@@ -106,14 +108,16 @@ void rmdirt(char *s)
 			printf("Unable to delete directory\n");
 		}
 	}
-        
+
 }
+
 void touch(char *s)
 {
 	FILE * fPtr;
 	fPtr = fopen(s, "w");
 	fclose(fPtr);
 }
+
 void ls()
 {
 	char *s=pwd();
@@ -135,28 +139,28 @@ void cp(char *s1,char *s2)
     FILE *fp1, *fp2;
     char ch;
     int pos;
- 
-    if ((fp1 = fopen(s1,"r")) == NULL)    
-    {    
-        printf("\nFile cannot be opened");
+
+    if ((fp1 = fopen(s1,"r")) == NULL)
+    {
+        printf("\nFile cannot be opened\n");
         return;
     }
-    else     
+    else
     {
-        printf("\nFile %s opened for copy %s",s1); 
-		printf("\nFile %s opened for copy %s",s2);    
+        printf("File %s opened for copy",s1);
+		printf("\nFile %s opened for copy\n",s2);
     }
-    fp2 = fopen(s2, "w");  
-    fseek(fp1, 0L, SEEK_END); 
+    fp2 = fopen(s2, "w");
+    fseek(fp1, 0L, SEEK_END);
     pos = ftell(fp1);
-    fseek(fp1, 0L, SEEK_SET); 
+    fseek(fp1, 0L, SEEK_SET);
     while (pos--)
     {
-        ch = fgetc(fp1);  
+        ch = fgetc(fp1);
         fputc(ch, fp2);
     }
 	fclose(fp1);
-	fclose(fp2);        
+	fclose(fp2);
 }
 
 int isValidCommand(char* Command)
@@ -173,6 +177,25 @@ int isValidCommand(char* Command)
     return 0;
 }
 
+void  split(char *command, char *commandsplit[],int length)
+{
+    int i;
+    command[length]='\0';
+    while (*command != '\0')
+    {
+        while (*command == ' ')
+        {
+            *command = '\0';
+            command++;
+        }
+        *commandsplit++ = command;
+        while (*command != '\0' && *command != ' ')
+        {
+            command++;
+        }
+    }
+    *commandsplit = '\0';
+}
 
 int main()
 {
@@ -180,24 +203,15 @@ int main()
     ShowWindow(consoleWindow, SW_MAXIMIZE); // this mimics clicking on its' maximize button
 
     welcome();
-    char Command[50];
-    char cmd[10];
-    int i = 0;
+    char Command[256];
+    char *commandsplit[3];
     while(1)
     {
-        i++;
-        printf("%s",pwd());
+        printf("\n%s",pwd());
         printf("> ");
         fgets(Command,1024,stdin);
-        char * token = strtok(Command, " ");
-        char commandsplit[3][10];
-		int i=0; 
-   		while( token != NULL )
-		{
-			snprintf(commandsplit[i], sizeof(commandsplit[i]), "%s", token);
-      		token = strtok(NULL, " ");
-      		i++;
-   		}
+        split(Command,commandsplit,strlen(Command)-1);
+
         if (!(isValidCommand(commandsplit[0])))
         {
             printf("Command not found\n");
@@ -210,7 +224,7 @@ int main()
         else if(strcmp(commandsplit[0],"pwd")==0)
         {
             char *s=pwd();
-            printf("\n%s\n",s);
+            printf("%s\n",s);
         }
         else if(strcmp(commandsplit[0],"mkdir")==0)
         {
