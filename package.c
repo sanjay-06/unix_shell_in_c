@@ -29,14 +29,14 @@ void welcome()
 		    printf("Implementation of unix shell [Version 1.0] \n (c) Done by sanjay and saravnan.All rights reserved.\n\n\n");
 }
 
-char Commands[][10] = {"rm","cd","pwd","mkdir","rmdir","ls","cp","exit","touch"};
+char Commands[][10] = {"clear","cat","rm","cd","pwd","mkdir","rmdir","ls","cp","exit","touch"};
 
 char* pwd()
 {
     char cwd[256];
     if (getcwd(cwd, sizeof(cwd)) == NULL)
     {
-        perror("getcwd() error");
+    	perror("Error ");
     }
     else
     {
@@ -67,7 +67,7 @@ void mkdirt(char *s)
     if (!check)
         printf("Directory created\n");
     else
-        printf("Unable to create directory\n");
+        perror("Error ");
 }
 void rm(char *s)
 {
@@ -140,7 +140,7 @@ void cp(char *s1,char *s2)
 
     if ((fp1 = fopen(s1,"r")) == NULL)
     {
-        printf("\nFile cannot be opened\n");
+        perror("\nError ");
         return;
     }
     else
@@ -161,6 +161,64 @@ void cp(char *s1,char *s2)
 	fclose(fp2);
 }
 
+
+void cat(char *s,char *option)
+{
+	if (option=='\0')
+	{
+		FILE *fptr;
+	  
+	    char c;
+	  
+	    fptr = fopen(s, "r");
+	    if (fptr == NULL)
+	    {
+	        perror("Error ");
+	    }
+	
+	    c = fgetc(fptr);
+	    while (c != EOF)
+	    {
+	        printf ("%c", c);
+	        c = fgetc(fptr);
+	    }
+	  
+	    fclose(fptr);
+	}
+	else
+	{
+		if(strcmp(option,"-n")==0)
+		{
+			FILE *fptr;
+		  
+		    char c;
+		    int i=0;
+		  
+		    fptr = fopen(s, "r");
+		    if (fptr == NULL)
+		    {
+		        perror("Error ");
+		    }
+		
+		    c = fgetc(fptr);
+		    while (c != EOF)
+		    {
+		    	if(i==0)
+		    	{
+		    		printf("%d ",++i);
+				}
+		        printf ("%c", c);
+		        if(c=='\n')
+		    	{
+		    		printf("%d ",++i);
+				}
+		        c = fgetc(fptr);
+		    }
+		  
+		    fclose(fptr);
+		}
+	}
+}
 int isValidCommand(char* Command)
 {
     int l = sizeof(Commands)/sizeof(Commands[0]);
@@ -212,7 +270,7 @@ int main()
 
         if (!(isValidCommand(commandsplit[0])))
         {
-            printf("Command not found\n");
+            perror("Command not found\n");
             continue;
         }
         if (strcmp(commandsplit[0],"cd")==0)
@@ -252,6 +310,14 @@ int main()
         else if(strcmp(commandsplit[0],"rm")==0)
         {
             rm(commandsplit[1]);
+        }
+        else if(strcmp(commandsplit[0],"cat")==0)
+        {
+        	cat(commandsplit[1],commandsplit[2]);
+		}
+		else if(strcmp(commandsplit[0],"clear")==0)
+        {
+            system("cls");
         }
         else if(strcmp(commandsplit[0],"exit")==0)
         {
