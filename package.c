@@ -6,13 +6,19 @@
 #include <sys/stat.h>
 
 void welcome();
-void cd();
+void cd(char []);
 char* pwd();
-void mkdirt();
-void rmdirt();
-void ls();
-void cp();
+void mkdirt(char*);
+void rmdirt(char *);
+void rm(char*);
+int DirectoryExists(const char*);
+void touch(char*);
+void ls(char**);
+void cp(char*,char*);
+void cat(char*,char*);
 int isValidCommand(char*);
+void split(char*,char*[],int);
+int present(char* ,char *[]);
 
 void welcome()
 {
@@ -29,7 +35,7 @@ void welcome()
 		    printf("Implementation of unix shell [Version 1.0] \n (c) Done by sanjay and saravnan.All rights reserved.\n\n\n");
 }
 
-char Commands[][10] = {"clear","cat","rm","cd","pwd","mkdir","rmdir","ls","cp","exit","touch"};
+char Commands[][10] = {"echo","clear","cat","rm","cd","pwd","mkdir","rmdir","ls","cp","exit","touch"};
 
 char* pwd()
 {
@@ -116,8 +122,9 @@ void touch(char *s)
 	fclose(fPtr);
 }
 
-void ls()
+void ls(char* ret[])
 {
+  //  int r=0;
 	char *s=pwd();
     struct dirent *entry = NULL;
     DIR *dp = NULL;
@@ -126,10 +133,13 @@ void ls()
     {
         while ((entry = readdir(dp)))
         {
+ //           ret[r] = entry->d_name;
+ //           r++;
             printf ("%s\n", entry->d_name);
         }
     }
     closedir(dp);
+//    ret[r] = '\0';
 }
 
 void cp(char *s1,char *s2)
@@ -167,22 +177,22 @@ void cat(char *s,char *option)
 	if (option=='\0')
 	{
 		FILE *fptr;
-	  
+
 	    char c;
-	  
+
 	    fptr = fopen(s, "r");
 	    if (fptr == NULL)
 	    {
 	        perror("Error ");
 	    }
-	
+
 	    c = fgetc(fptr);
 	    while (c != EOF)
 	    {
 	        printf ("%c", c);
 	        c = fgetc(fptr);
 	    }
-	  
+
 	    fclose(fptr);
 	}
 	else
@@ -190,16 +200,16 @@ void cat(char *s,char *option)
 		if(strcmp(option,"-n")==0)
 		{
 			FILE *fptr;
-		  
+
 		    char c;
 		    int i=0;
-		  
+
 		    fptr = fopen(s, "r");
 		    if (fptr == NULL)
 		    {
 		        perror("Error ");
 		    }
-		
+
 		    c = fgetc(fptr);
 		    while (c != EOF)
 		    {
@@ -214,11 +224,17 @@ void cat(char *s,char *option)
 				}
 		        c = fgetc(fptr);
 		    }
-		  
+
 		    fclose(fptr);
 		}
 	}
 }
+
+char* echo(char* s)
+{
+    return s;
+}
+
 int isValidCommand(char* Command)
 {
     int l = sizeof(Commands)/sizeof(Commands[0]);
@@ -253,6 +269,19 @@ void  split(char *command, char *commandsplit[],int length)
     *commandsplit = '\0';
 }
 
+int present(char* op,char * splits[])
+{
+    while (*splits != '\0')
+    {
+        if (strcmp(op,*splits)==0)
+        {
+            return 1;
+        }
+        *splits++;
+    }
+    return 0;
+}
+
 int main()
 {
     HWND consoleWindow = GetConsoleWindow(); // This gets the value Windows uses to identify the output window
@@ -260,7 +289,7 @@ int main()
 
     welcome();
     char Command[256];
-    char *commandsplit[3];
+    char *commandsplit[10];
     while(1)
     {
         printf("\n%s",pwd());
@@ -270,10 +299,100 @@ int main()
 
         if (!(isValidCommand(commandsplit[0])))
         {
-            perror("Command not found\n");
+            printf("Command not found\n");
             continue;
         }
-        if (strcmp(commandsplit[0],"cd")==0)
+        if (present(">",commandsplit))
+        {
+            if (strcmp(commandsplit[0],">"))
+            {
+                printf("Command not found\n");
+                continue;
+            }
+            char *left[3],*right[3];
+            int i = 1,l=0,r=0;
+            int flag = 0;
+            while (commandsplit[i] != '\0')
+            {
+                if (flag == 0)
+                {
+                    left[l] = commandsplit[i];
+                    l++;
+                }
+                else if (flag == 1)
+                {
+                    right[r] = commandsplit[i];
+                    r++;
+                }
+                if (strcmp(commandsplit[i],">")==0)
+                {
+                    flag = 1;
+                }
+                i++;
+            }
+
+        }
+        else if (present("<",commandsplit))
+        {
+            if (strcmp(commandsplit[0],"<"))
+            {
+                printf("Command not found\n");
+                continue;
+            }
+            char *left[3],*right[3];
+            int i = 1,l=0,r=0;
+            int flag = 0;
+            while (commandsplit[i] != '\0')
+            {
+                if (flag == 0)
+                {
+                    left[l] = commandsplit[i];
+                    l++;
+                }
+                else if (flag == 1)
+                {
+                    right[r] = commandsplit[i];
+                    r++;
+                }
+                if (strcmp(commandsplit[i],"<")==0)
+                {
+                    flag = 1;
+                }
+                i++;
+            }
+
+        }
+        else if (present("|",commandsplit))
+        {
+            if (strcmp(commandsplit[0],">"))
+            {
+                printf("Command not found\n");
+                continue;
+            }
+            char *left[3],*right[3];
+            int i = 1,l=0,r=0;
+            int flag = 0;
+            while (commandsplit[i] != '\0')
+            {
+                if (flag == 0)
+                {
+                    left[l] = commandsplit[i];
+                    l++;
+                }
+                else if (flag == 1)
+                {
+                    right[r] = commandsplit[i];
+                    r++;
+                }
+                if (strcmp(commandsplit[i],"|")==0)
+                {
+                    flag = 1;
+                }
+                i++;
+            }
+
+        }
+        else if (strcmp(commandsplit[0],"cd")==0)
         {
             if(commandsplit[1]==NULL)
             {
@@ -289,27 +408,54 @@ int main()
         }
         else if(strcmp(commandsplit[0],"mkdir")==0)
         {
-            mkdirt(commandsplit[1]);
+            int i = 1;
+            while (commandsplit[i] != '\0')
+            {
+                mkdirt(commandsplit[i]);
+                i++;
+            }
         }
         else if(strcmp(commandsplit[0],"rmdir")==0)
         {
-            rmdirt(commandsplit[1]);
+            int i = 1;
+            while (commandsplit[i] != '\0')
+            {
+                rmdirt(commandsplit[i]);
+                i++;
+            }
         }
         else if(strcmp(commandsplit[0],"ls")==0)
         {
-            ls();
-        }
+            char *ret[256];
+            ls(ret);
+/*            int r = 0;
+            while (ret[r] != '\0')
+            {
+                printf("%s\n",ret[r]);
+                r++;
+            }
+  */      }
         else if(strcmp(commandsplit[0],"cp")==0)
         {
             cp(commandsplit[1],commandsplit[2]);
         }
         else if(strcmp(commandsplit[0],"touch")==0)
         {
-            touch(commandsplit[1]);
+            int i = 1;
+            while (commandsplit[i] != '\0')
+            {
+                touch(commandsplit[i]);
+                i++;
+            }
         }
         else if(strcmp(commandsplit[0],"rm")==0)
         {
-            rm(commandsplit[1]);
+            int i = 1;
+            while (commandsplit[i] != '\0')
+            {
+                rm(commandsplit[i]);
+                i++;
+            }
         }
         else if(strcmp(commandsplit[0],"cat")==0)
         {
@@ -318,6 +464,11 @@ int main()
 		else if(strcmp(commandsplit[0],"clear")==0)
         {
             system("cls");
+        }
+        else if(strcmp(commandsplit[0],"echo")==0)
+        {
+
+            printf("%s",echo(commandsplit[1]));
         }
         else if(strcmp(commandsplit[0],"exit")==0)
         {
