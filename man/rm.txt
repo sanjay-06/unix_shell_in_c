@@ -1,1 +1,11 @@
-ntgn
+
+NAME
+	rm - remove files
+
+SYNOPSIS
+	rm [FILE]...
+
+DESCRIPTION
+	rm removes each specified file from the present working directory.
+	Arguements are mandatory.
+	Can delete upto 8 files at a time.

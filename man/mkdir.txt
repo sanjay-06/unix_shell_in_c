@@ -1,1 +1,11 @@
-nn
+
+NAME
+	mkdir - make directories
+
+SYNOPSIS
+	mkdir [DIRECTORY]...
+
+DESCRIPTION
+	Create the DIRECTORY(ies), if they do not already exist.
+	Arguements are mandatory.
+	Can create upto 8 directories at a time.

@@ -1,1 +1,10 @@
-cd
+
+NAME
+	cd - change directory
+
+SYNOPSIS
+	cat [DIRECTORY]
+
+DESCRIPTION
+	Change the present working directory to [Directory](path)
+	Arguements are mandatory.

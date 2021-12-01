@@ -1,1 +1,9 @@
-clear
+
+NAME
+	clear - clear the terminal screen
+
+SYNOPSIS
+	clear
+
+DESCRIPTION
+	clears the screen including its scrollback buffer using the windows clear method.

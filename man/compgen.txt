@@ -1,1 +1,9 @@
-c
+
+NAME
+	compgen - displays the list of commands available.
+
+SYNOPSIS
+	compgen
+
+DESCRIPTION
+	Displays all the commands that are available in the shell including the available pipe and redirection commands.

@@ -1,1 +1,11 @@
-ng n
+
+NAME
+	wc - print newline, word, and byte counts for the file
+
+SYNOPSIS
+	wc [FILE]...
+
+DESCRIPTION
+	Print newline, word, and byte counts for the FILE.
+	A word is non-zero-length sequence of characters delimited by white space.
+	The input can be piped from another command.([FILE] is not needed in this case).

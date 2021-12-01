@@ -1,1 +1,12 @@
- gb
+
+NAME
+	touch - change file timestamps
+
+SYNOPSIS
+	touch [FILE]...
+
+DESCRIPTION
+	Creates a new [FILE](s).
+	If [FILE] already exists, updates the access and modification times of each [FILE].
+	Arguements are mandatory.
+	Can create upto 8 files at a time.

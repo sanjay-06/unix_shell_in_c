@@ -1,1 +1,11 @@
-nf vvn
+
+NAME
+	rmdir - remove empty directories
+
+SYNOPSIS
+	rmdir [DIRECTORY]...
+
+DESCRIPTION
+	Remove the DIRECTORY(ies), if they are empty.
+	Arguements are mandatory.
+	Can delete upto 8 repositories at a time.

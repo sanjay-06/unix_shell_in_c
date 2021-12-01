@@ -1,1 +1,12 @@
-cat
+
+NAME
+	cat - concatenate files and print on the standard output
+
+SYNOPSIS
+	cat [OPTION] [FILE]...
+
+DESCRIPTION
+	Display contents of FILE(s).
+	Concatenate FILE(s) to standard output.
+OPTION
+	-n	number(number all output lines)

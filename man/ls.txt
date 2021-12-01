@@ -1,1 +1,10 @@
-"hello"
+
+NAME
+	ls - list directory contents
+
+SYNOPSIS
+	ls
+
+DESCRIPTION
+	List the files present in the present working directory.
+	The output can be piped to a command or redirected to a file.

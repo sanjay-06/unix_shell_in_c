@@ -20,7 +20,7 @@ class Pipe
 	DWORD dwNoBytesWrite;
 	DWORD dwNoBytesRead;
 public:
-	
+
 void set_sz(char s[256])
 {
 	strcpy(szBuffer,s);
@@ -28,14 +28,14 @@ void set_sz(char s[256])
 }
 void createpipe()
 {
-		
+
 	bCreatePipe=CreatePipe(
 	&hRead,
 	&hWrite,
 	NULL,
 	dwBufferSize
 	);
-	
+
 }
 void writepipe()
 {
@@ -221,24 +221,24 @@ void cat(char *s,char *option="\0",int *index=0)
 {
 	if (option=="\0")
 	{
-		
+
 		FILE *fptr;
-	  
+
 	    char c;
-	  
+
 	    fptr = fopen(s, "r");
 	    if (fptr == NULL)
 	    {
 	        perror("Error ");
 	    }
-	
+
 	    c = fgetc(fptr);
 	    while (c != EOF)
 	    {
 	        printf ("%c", c);
 	        c = fgetc(fptr);
 	    }
-	  
+
 	    fclose(fptr);
 	}
 	else
@@ -246,16 +246,16 @@ void cat(char *s,char *option="\0",int *index=0)
 		if(strcmp(option,"-n")==0)
 		{
 			FILE *fptr;
-		  
+
 		    char c;
 		    int i=*index;
-		  
+
 		    fptr = fopen(s, "r");
 		    if (fptr == NULL)
 		    {
 		        perror("Error ");
 		    }
-		
+
 		    c = fgetc(fptr);
 		    while (c != EOF)
 		    {
@@ -267,7 +267,7 @@ void cat(char *s,char *option="\0",int *index=0)
 		        if(c=='\n')
 		    	{
 		    		printf("%d ",++i);
-		    		
+
 				}
 		        c = fgetc(fptr);
 		    }
@@ -285,28 +285,28 @@ void wc(char *s,char *set="\0")
 	    if (fp == NULL) {
 	        printf("File Not Found!\n");
 	    }
-	  
+
 	    fseek(fp, 0L, SEEK_END);
-	  
+
 	    long int res = ftell(fp);
 	    fseek(fp, 0L, SEEK_SET);
 	    char ch=fgetc(fp);
         int wrd=0,line=0;
-		while(ch!=EOF) 
-        {  
+		while(ch!=EOF)
+        {
                 if(ch==' '||ch=='\n')
-                    { 
+                    {
                         if(ch=='\n')
                         {
                         	line++;
 						}
-                        wrd++; 
+                        wrd++;
                     }
-                ch=fgetc(fp); 
+                ch=fgetc(fp);
         }
         fclose(fp);
 		printf("%d %d %ld \n",line,wrd,res);
-		
+
 	}
 	else if(set=="|")
 	{
@@ -329,8 +329,8 @@ void wc(char *s,char *set="\0")
 		}
 		printf("%d %d %d \n",line,word,byte);
 	}
-	
-	
+
+
 }
 void compgen()
 {
@@ -342,7 +342,7 @@ void compgen()
 	}
 	printf("\nPipe supporting commands --> \n pwd | wc \n pwd | echo \n pwd | cat \n ls | wc \n ls | echo \n ls | cat ");
 	printf("\nOutput Redirection commands --> \n ls > <filename> \n pwd > <filename>\n echo <string> > <filename>\n");
-	
+
 }
 
 int isValidCommand(char* Command)
@@ -396,17 +396,17 @@ void man(char *s)
 	    {
 	        perror("Error ");
 	    }
-	
+
 	    char c = fgetc(fp);
 	    while (c != EOF)
 	    {
 	        printf ("%c", c);
 	        c = fgetc(fp);
 	    }
-	  
+
 	    fclose(fp);
 	}
-	
+
 }
 void write(char *filename,char *s)
 {
@@ -431,8 +431,11 @@ int present(char* op,char * splits[])
 int main()
 {
 	Pipe p;
-    HWND consoleWindow = GetConsoleWindow();
-    ShowWindow(consoleWindow, SW_MAXIMIZE);
+    //HWND consoleWindow = GetConsoleWindow();
+    //ShowWindow(consoleWindow, SW_MAXIMIZE);
+    system("mode con COLS=700");
+	ShowWindow(GetConsoleWindow(),SW_MAXIMIZE);
+	SendMessage(GetConsoleWindow(),WM_SYSKEYDOWN,VK_RETURN,0x20000000);
     welcome();
     char Command[256];
     char backup[strlen(Command)];
@@ -451,11 +454,11 @@ int main()
         }
         int mid,last,i;
         char s[3];
-        
-        
+
+
         if(present("|",commandsplit))
         {
-        
+
         	i=0;
 		    while (commandsplit[i] != "\0")
 		    {
@@ -498,7 +501,7 @@ int main()
                 int i=0,size=0;
                 while(strcmp(ret[i],"NULL"))
                 {
-                
+
                 	ret[i++];
                     size++;
                 }
@@ -513,37 +516,37 @@ int main()
 					}
 					if(i!=size-1)
 					{
-						s[k]+='\n';	
+						s[k]+='\n';
 					}
 					k++;
 			    }
                 p.set_sz(s);
-              
+
                 p.createpipe();
-                
+
                 p.writepipe();
-                
+
             }
-            
+
             if(strcmp(right[0],"cat")==0)
-            {        	
-			   	printf("%s",p.readpipe()); 
-                
+            {
+			   	printf("%s",p.readpipe());
+
             }
             else if(strcmp(right[0],"echo")==0)
             {
-            	printf("%s",echo(p.readpipe())); 
+            	printf("%s",echo(p.readpipe()));
             }
             else if(strcmp(right[0],"wc")==0)
             {
-            	wc(p.readpipe(),"|"); 
+            	wc(p.readpipe(),"|");
             }
         }
-        
-        
+
+
         else if(present(">",commandsplit))
         {
-        
+
         	i=0;
         	int mid=0;
         	int last;
@@ -588,7 +591,7 @@ int main()
                 int i=0,size=0;
                 while(strcmp(ret[i],"NULL"))
                 {
-                
+
                 	ret[i++];
                     size++;
                 }
@@ -605,16 +608,16 @@ int main()
 					k++;
 			    }
                 write(right[0],s);
-                
+
             }
-            
+
             else if(strcmp(left[0],"echo")==0)
             {
                 write(right[0],echo(left[1]));
-                
+
             }
-		}  
-        
+		}
+
 		else if (strcmp(commandsplit[0],"cd")==0)
         {
             if(commandsplit[1]==NULL)
@@ -681,9 +684,9 @@ int main()
         }
          else if(strcmp(commandsplit[0],"cat")==0)
         {
-            
+
             int index=0;
-            
+
         	if(strcmp(commandsplit[1],"-n")==0)
         	{
         		int i = 2;

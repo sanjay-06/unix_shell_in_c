@@ -1,1 +1,11 @@
-e
+
+NAME
+	exit - cause normal shell termination.
+
+SYNOPSIS
+	exit
+
+DESCRIPTION
+	exit causes normal process termination and the return value is 0.
+
+	

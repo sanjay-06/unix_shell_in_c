@@ -1,1 +1,10 @@
-c
+
+NAME
+	cp - copy files
+
+SYNOPSIS
+	cp [SOURCE FILE] [DESTINATION FILE]
+
+DESCRIPTION
+	Copy the contents of [SOURCE FILE] to [DESTINATION FILE]
+	Arguements are mandatory.

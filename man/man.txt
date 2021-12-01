@@ -1,1 +1,12 @@
-df
+
+NAME
+	man - an interface to the system reference manuals
+
+SYNOPSIS
+	man [COMMAND]
+
+DESCRIPTION
+	man is the system's manual pager.
+	[COMMAND] is normallly the name of command available.
+	The file associated with each of these arguements is then found and displayed.
+	Arguements are mandatory.
